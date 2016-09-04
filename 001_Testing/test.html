@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+
+  <!-- Mocha css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/2.1.0/mocha.css">
+  <!-- Mocha dependency -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/2.1.0/mocha.js"></script>
+  <!-- Mocha: setup BDD -->
+  <script>
+    mocha.setup('bdd');
+  </script>
+
+  <!-- chai dependency -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/2.0.0/chai.js"></script>
+  <!-- export assert -->
+  <script>
+    var assert = chai.assert;
+  </script>
+</head>
+
+<body>
+
+  <!-- script which should be tested -->
+  <script src="MyScript.js"></script>
+
+  <!-- test itself -->
+  <script src="MyScriptTest.js"></script>
+
+  <!-- element with id="mocha" for test results -->
+  <div id="mocha"></div>
+
+  <!-- run tests! -->
+  <script>
+    mocha.run();
+  </script>
+</body>
+
+</html>

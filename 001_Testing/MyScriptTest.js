@@ -35,6 +35,19 @@ describe("Main test", function () {
             assert.equal(point.equals(anotherPoint), false);
         });
 
+        it("should return LEVEL=0 if parent is NULL", function () {
+            var point = new Point(1, 2);
+            assert.equal(point.level, 0);
+        });
+
+        it("should have LEVEL=parent.LEVEL+1 if parent is NOT NULL", function () {
+            var point = new Point(1, 2);
+            var childPoint = new Point(2, 3, point);
+            var nextChild = new Point(3, 4, childPoint);
+            assert.equal(childPoint.level, 1);
+            assert.equal(nextChild.level, 2);
+        });
+
     });
 
     describe("isValidPosition", function () {
@@ -111,13 +124,15 @@ describe("Main test", function () {
         });
     });
 
-    describe("do", function () {
+    describe("go", function () {
         var startPoint = new Point(0, 0);
         var endPoint = new Point(4, 4);
 
-        it("Should return endPoint for valid parameters", function () {
+        it("Should return valid path from startPoint to endPoint for valid set of parameters", function () {
             var result = go(startPoint, endPoint, map, visited);
-            assert.equal(result.equals(endPoint), true);
+            result[0].equals(endPoint);
+            result[result.length - 1].equals(startPoint);
+            //assert.equal(result.equals(endPoint), true);
         });
 
     });

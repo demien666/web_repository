@@ -17,12 +17,20 @@ function getLogger() {
 
 var logger = getLogger();
 
-function Point(x, y) {
+function Point(x, y, parent) {
     var self = Object.create(null);
     self.x = x;
     self.y = y;
+    self.parent = parent;
+    self.level = 0;
+    if (parent) {
+        self.level = parent.level + 1;
+    }
     self.equals = function (anotherPoint) {
         return (self.x === anotherPoint.x && self.y === anotherPoint.y);
+    };
+    self.toString = function () {
+        return "[" + self.x + "," + self.y + "]";
     };
     return self;
 }
@@ -30,28 +38,33 @@ function Point(x, y) {
 function isValidPosition(point, map) {
     var x = point.x;
     var y = point.y;
-    //logger.trace('    checking isValidPosition: [' + x + ',' + y + ']');
+    //logger.trace("    checking isValidPosition: " + point.toString());
     return (x >= 0 && x < Object.keys(map).length && y >= 0 && y < map[0].length);
 }
 
 function isVisited(point, visited) {
     //logger.trace('    checking isVisited: [' + point.x + ',' + point.y + ']');
-    return visited[point.x][point.y] == 1;
+    var p = visited[point.x][point.y];
+    if (typeof p == "object") {
+        return true;
+    } else {
+        return p == 1;
+    }
 }
 
 function isAcessable(point, map) {
-    //logger.trace('    checking isAcessable: [' + point.x + ',' + point.y + ']');
+    //logger.trace("    checking isAcessable: " + point.toString());
     return map[point.x][point.y] == 1;
 }
 
 function getPointsAround(point) {
     var x = point.x;
     var y = point.y;
-    return [new Point(x - 1, y), new Point(x + 1, y), new Point(x, y - 1), new Point(x, y + 1)];
+    return [new Point(x - 1, y, point), new Point(x + 1, y, point), new Point(x, y - 1, point), new Point(x, y + 1, point)];
 }
 
 function getNextPoints(point, map, visited) {
-    //logger.trace('  getNextPoints: [' + point.x + ',' + point.y + ']');
+    //logger.trace("  getNextPoints: " + point.toString());
     var nexts = getPointsAround(point);
     var result = [];
     nexts.map(function (next) {
@@ -59,6 +72,20 @@ function getNextPoints(point, map, visited) {
             result.push(next);
         }
     });
+    return result;
+}
+
+function extractFullPath(point) {
+    var result = [];
+    var path = "";
+    while (point.parent) {
+        result.push(point);
+        point = point.parent;
+        path = path + point.toString() + "<-";
+    }
+    result.push(point);
+    path = path + point.toString();
+    logger.trace(path);
     return result;
 }
 
@@ -70,11 +97,11 @@ function go(startPoint, endPoint, map, visited) {
     queue.push(startPoint);
     while (queue.length > 0) {
         current = queue.shift();
-        logger.trace('processing from queue: [' + current.x + ',' + current.y + ']');
+        //logger.trace('processing from queue: [' + current.x + ',' + current.y + ']');
         if (current.equals(endPoint)) {
-            return current;
+            return extractFullPath(current);
         }
-        visited[current.x][current.y] = 1;
+        visited[current.x][current.y] = current;
 
         nexts = getNextPoints(current, map, visited);
 

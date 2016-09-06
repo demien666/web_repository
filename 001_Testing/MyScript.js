@@ -77,14 +77,13 @@ function getNextPoints(point, map, visited) {
 
 function extractFullPath(point) {
     var result = [];
-    var path = "";
+    var path = point.toString();
     while (point.parent) {
         result.push(point);
         point = point.parent;
-        path = path + point.toString() + "<-";
+        path = path + "<-"+point.toString();
     }
     result.push(point);
-    path = path + point.toString();
     logger.trace(path);
     return result;
 }

@@ -130,9 +130,8 @@ describe("Main test", function () {
 
         it("Should return valid path from startPoint to endPoint for valid set of parameters", function () {
             var result = go(startPoint, endPoint, map, visited);
-            result[0].equals(endPoint);
-            result[result.length - 1].equals(startPoint);
-            //assert.equal(result.equals(endPoint), true);
+            assert.equal(result[0].equals(endPoint), true);
+            assert.equal(result[result.length - 1].equals(startPoint), true);
         });
 
     });

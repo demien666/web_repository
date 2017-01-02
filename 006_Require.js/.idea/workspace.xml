@@ -250,7 +250,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Git/bin/git.exe" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../007_BackBone" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="js-jscs-nodeInterpreter" value="D:\dev\nodejs\node.exe" />
@@ -326,12 +326,12 @@
       <option name="presentableId" value="Default" />
       <updated>1478180651942</updated>
       <workItem from="1478180654166" duration="5679000" />
-      <workItem from="1478189673158" duration="83000" />
+      <workItem from="1478189673158" duration="292000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5762000" />
+    <option name="totallyTimeSpent" value="5971000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1592" y="-8" width="1936" height="1096" extended-state="6" />

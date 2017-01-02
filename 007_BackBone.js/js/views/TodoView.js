@@ -1,6 +1,6 @@
     // renders individual todo items list (li)
     app.TodoView = Backbone.View.extend({
-      tagName: 'li',
+      tagName: 'tr',
       template: _.template($('#item-template').html()),
       render: function(){
         this.$el.html(this.template(this.model.toJSON()));
@@ -12,11 +12,11 @@
         this.model.on('destroy', this.remove, this); // remove: Convenience Backbone's function for removing the view from the DOM.
       },      
       events: {
-        'dblclick label' : 'edit',
         'keypress .edit' : 'updateOnEnter',
         'blur .edit' : 'close',
         'click .toggle': 'toggleCompleted',
-        'click .destroy': 'destroy'
+        'click .destroy': 'destroy',
+        'click #edit-btn': 'edit'
       },
       edit: function(){
         this.$el.addClass('editing');

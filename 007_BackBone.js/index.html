@@ -1,36 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>To-do App in Backbone.js</title>
-
-    <!-- ========= -->
-    <!--    CSS    -->
-    <!-- ========= -->
+    <title>Simple Backbone example</title>
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
-
 </head>
 <body>
-<!-- ========= -->
-<!-- Your HTML -->
-<!-- ========= -->
-
 <section id="todoapp">
     <header id="header">
-        <h1>Todos</h1>
-        <input id="new-todo" placeholder="What needs to be done?" autofocus>
+        <h1>New TODO</h1>
+        <input id="new-todo" placeholder="Enter new TODO here" autofocus>
         <button id="add-btn">add</button>
     </header>
     <section id="main">
+        <h1>List of TODOs:</h1>
         <table id="todo-list" border="1"></table>
     </section>
 </section>
-<div>
-    <p>Find the tutorial and code in <a
-            href="http://adrianmejia.com/blog/2012/09/11/backbone-dot-js-for-absolute-beginners-getting-started/">here</a>
-    </p>
-</div>
 
 <!-- Templates -->
 <script type="text/template" id="item-template">
@@ -43,10 +28,12 @@
             <input class="edit" value="<%- title %>">
         </td>
         <td>
-            <button id="edit-btn">edit</button>
+            <button class="edit-btn">edit</button>
+            <button class="save-btn">save</button>
         </td>
         <td>
-            <button class="destroy">remove</button>
+            <button class="remove-btn">remove</button>
+            <button class="cancel-btn">cancel</button>
         </td>
     </div>
 </script>

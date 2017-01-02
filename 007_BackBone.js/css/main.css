@@ -4,9 +4,43 @@
     #todo-list input.edit {
       display: none; /* Hides input box*/
     }
+
+    #todo-list button.edit-btn {
+        display: inline; /* Shows input text box when .editing*/
+    }
+
+
+    #todo-list button.save-btn {
+        display: none; /* Shows input text box when .editing*/
+    }
+
+    #todo-list button.cancel-btn {
+        display: none; /* Shows input text box when .editing*/
+    }
+
+
+ /* editing  */
+
     #todo-list .editing label {
-      display: none; /* Hides label text when .editing*/
-    }    
+        display: none; /* Hides label text when .editing*/
+    }
     #todo-list .editing input.edit {
-      display: inline; /* Shows input text box when .editing*/
-    } 
+        display: inline; /* Shows input text box when .editing*/
+    }
+
+    #todo-list .editing button.save-btn {
+        display: inline; /* Shows input text box when .editing*/
+    }
+
+    #todo-list .editing button.edit-btn {
+        display: none; /* Shows input text box when .editing*/
+    }
+
+    #todo-list .editing button.cancel-btn {
+        display: inline; /* Shows input text box when .editing*/
+    }
+
+    #todo-list .editing button.remove-btn {
+        display: none; /* Shows input text box when .editing*/
+    }
+

@@ -12,15 +12,18 @@
         this.model.on('destroy', this.remove, this); // remove: Convenience Backbone's function for removing the view from the DOM.
       },      
       events: {
-        'keypress .edit' : 'updateOnEnter',
-        'blur .edit' : 'close',
+        'click .save-btn' : 'close',
+        'click .cancel-btn' : 'cancel',
         'click .toggle': 'toggleCompleted',
-        'click .destroy': 'destroy',
-        'click #edit-btn': 'edit'
+        'click .remove-btn': 'destroy',
+        'click .edit-btn': 'edit'
       },
       edit: function(){
         this.$el.addClass('editing');
         this.input.focus();
+      },
+      cancel: function(){
+        this.$el.removeClass('editing');
       },
       close: function(){
         var value = this.input.val().trim();
@@ -28,11 +31,6 @@
           this.model.save({title: value});
         }
         this.$el.removeClass('editing');
-      },
-      updateOnEnter: function(e){
-        if(e.which == 13){
-          this.close();
-        }
       },
       toggleCompleted: function(){
         this.model.toggle();

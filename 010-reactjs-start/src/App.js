@@ -14,6 +14,66 @@ class Header extends Component {
 	}
 }
 
+class EnterText extends Component {
+	constructor(props) {
+		super(props);
+		this.state={short:'', long:'', select:'1'};
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleChange = this.handleChange.bind(this);
+	}
+	
+	handleSubmit(event) {
+		console.log("submitted:"+this.state.value);
+		event.preventDefault();
+	}
+		
+	handleChange(event) {
+		const newVal = event.target.value;
+		const name = event.target.name;
+		console.log(name+" changed to "+newVal);
+		this.setState({[name]:newVal});
+
+	}	
+	
+	
+	render() {
+		return (
+		   <form onSubmit={this.handleSubmit}>
+		     <label>
+			   Short text:
+			   <input name="short" type="text" value={this.state.short} onChange={this.handleChange}/>
+			 </label>
+			 <br/>
+		     <label>
+			   Long text:
+			   <textarea name="long" value={this.state.long} onChange={this.handleChange}/>
+			 </label>			 
+			 <br/>
+			 <select name="select" value={this.state.select} onChange={this.handleChange}>
+			     <option value="1">One</option>
+				 <option value="2">Two</option>
+				 <option value="3">Three</option>
+			 </select>
+		     <input type="submit" value="Submit"/>
+		   </form>
+		);
+	}
+	
+}
+
+class List extends Component {	
+	render() {
+		let listItems = this.props.elements.map((element,index)=>
+		   <li key={index} >{element}</li>
+		);
+						
+		return (
+		  <ul>
+		  {listItems}
+		  </ul>
+		);		
+	}	
+}
 
 class Switch extends Component {
 	
@@ -39,12 +99,102 @@ class Switch extends Component {
 	
 }
 
+
+function Verdict(props) {
+  if (props.celsius >= 100) {
+    return <p>The water would boil.</p>;
+  }
+  return <p>The water would not boil.</p>;
+}
+
+const scaleNames = {
+  c: 'Celsius',
+  f: 'Fahrenheit'
+};
+
+function toCelsius(fahrenheit) {
+  return (fahrenheit - 32) * 5 / 9;
+}
+
+function toFahrenheit(celsius) {
+  return (celsius * 9 / 5) + 32;
+}
+
+function tryConvert(temperature, convert) {
+  const input = parseFloat(temperature);
+  if (Number.isNaN(input)) {
+    return '';
+  }
+  const output = convert(input);
+  const rounded = Math.round(output * 1000) / 1000;
+  return rounded.toString();
+}
+
+class TemperatureInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(e) {
+	this.props.onTemperatureChange(e.target.value);
+  }
+
+  render() {
+	const temperature = this.props.temperature;
+    const scale = this.props.scale;
+    return (
+      <fieldset>
+        <legend>Enter temperature in {scaleNames[scale]}:</legend>
+        <input value={temperature}
+               onChange={this.handleChange} />
+      </fieldset>
+    );
+  }
+}
+
+class Calculator extends Component {
+	constructor(props) {
+		super(props);				
+		this.handleCChange = this.handleCChange.bind(this);
+		this.handleFChange = this.handleFChange.bind(this);
+		this.state={temperature:'', scale:'c'};
+	}
+	
+	handleCChange(temperature) {
+		this.setState({temperature:temperature, scale:'c'});
+	}
+	
+	handleFChange(temperature) {
+		this.setState({temperature:temperature, scale:'f'});
+	}		
+	
+	render() {
+        const scale = this.state.scale;
+        const temperature = this.state.temperature;
+        const celsius = scale === 'f' ? tryConvert(temperature, toCelsius) : temperature;
+        const fahrenheit = scale === 'c' ? tryConvert(temperature, toFahrenheit) : temperature;
+ 		
+		return(
+		   <div>
+		      <TemperatureInput scale="c" temperature={celsius}   onTemperatureChange={this.handleCChange}  />
+			  <TemperatureInput scale="f" temperature={fahrenheit} onTemperatureChange={this.handleFChange}  />
+			  <Verdict celsius={celsius} />
+		   </div>
+		);
+	}
+	
+}
+
 class Body extends Component {
 	render() {
 		return (
         <p className="App-intro">
           Hello world! 
 		  <Switch/>
+		  <List elements={["one","two","three"]}/>
+		  <EnterText/>
+		  <Calculator/>
         </p>		
 		
 		);

@@ -158,22 +158,23 @@ class Calculator extends Component {
 		super(props);				
 		this.handleCChange = this.handleCChange.bind(this);
 		this.handleFChange = this.handleFChange.bind(this);
-		this.state={temperature:'', scale:'c'};
+		this.state={tempC:'', tempF:''};
 	}
 	
 	handleCChange(temperature) {
-		this.setState({temperature:temperature, scale:'c'});
+		const tempF = toFahrenheit(temperature);
+		this.setState({tempC:temperature, tempF:tempF});
 	}
 	
 	handleFChange(temperature) {
-		this.setState({temperature:temperature, scale:'f'});
+		const tempC = toCelsius(temperature);
+		this.setState({tempC:tempC, tempF:temperature});
 	}		
 	
 	render() {
-        const scale = this.state.scale;
-        const temperature = this.state.temperature;
-        const celsius = scale === 'f' ? tryConvert(temperature, toCelsius) : temperature;
-        const fahrenheit = scale === 'c' ? tryConvert(temperature, toFahrenheit) : temperature;
+		
+        const celsius = this.state.tempC;
+        const fahrenheit = this.state.tempF;
  		
 		return(
 		   <div>

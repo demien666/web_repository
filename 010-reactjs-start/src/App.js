@@ -120,16 +120,6 @@ function toFahrenheit(celsius) {
   return (celsius * 9 / 5) + 32;
 }
 
-function tryConvert(temperature, convert) {
-  const input = parseFloat(temperature);
-  if (Number.isNaN(input)) {
-    return '';
-  }
-  const output = convert(input);
-  const rounded = Math.round(output * 1000) / 1000;
-  return rounded.toString();
-}
-
 class TemperatureInput extends React.Component {
   constructor(props) {
     super(props);
@@ -187,15 +177,47 @@ class Calculator extends Component {
 	
 }
 
+function SplitPane(props) {
+  return (
+    <div className="SplitPane">
+      <div className="SplitPane-left">
+        {props.left}
+      </div>
+      <div className="SplitPane-right">
+        {props.right}
+      </div>
+    </div>
+  );
+}
+
+function Dialog(props) {
+	return (
+	   <div className="Dialog">
+	      <div className="Dialog-title">
+		     {props.title}
+		  </div>
+	      <div className="Dialog-message">
+		     {props.message}
+		  </div>
+	         {props.children}
+	   </div>
+	);
+}
+
 class Body extends Component {
 	render() {
 		return (
-        <p className="App-intro">
+        <p className="App-body">
           Hello world! 
 		  <Switch/>
 		  <List elements={["one","two","three"]}/>
 		  <EnterText/>
 		  <Calculator/>
+		  <SplitPane left={<Switch/>} right={<Switch/>}/>
+		  <Dialog title="Dialog title" message="here should be dialog message">
+		      <EnterText/>
+			  <EnterText/>
+		  </Dialog>
         </p>		
 		
 		);

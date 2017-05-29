@@ -22,11 +22,45 @@
 }
 
 
-.App-intro {
+.App-body {
+  text-align: left;	
   font-size: large;
 }
 
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+.SplitPane {
+  width: 100%;
+  height: 100%;
+}
+
+.SplitPane-left {
+  float: left;
+  width: 30%;
+  height: 100%;
+}
+
+.SplitPane-right {
+  float: right;
+  width: 70%;
+  height: 100%;
+}
+
+
+.Dialog {
+  background-color: #EEE;
+  color: black;
+}
+
+.Dialog-title {
+  background-color: #222;
+  color: white;
+}
+
+.Dialog-message {
+  background-color: #AAA;
+  color: #333;
 }

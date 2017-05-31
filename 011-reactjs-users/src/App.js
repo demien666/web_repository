@@ -11,7 +11,7 @@ function getFormValue(form, valueName) {
 	return result;	
 }
 
-class DepartmentAdd extends Component {
+class AddObjectForm extends Component {
 	
 	constructor(props) {
 		super(props);
@@ -21,30 +21,30 @@ class DepartmentAdd extends Component {
 	handleSubmit(event) {
 		event.preventDefault();
 		var form = event.target;
-		this.props.onDepartmentCreate(getFormValue(form, "id"), getFormValue(form, "name"));
+		var formObject={};
+		this.props.columns.forEach( (column)=> formObject[column.name]=getFormValue(form, column.name) );
+		this.props.onSubmit(formObject);
 	}
 	
-	render() {
+	render() {		
+		let tableRows = this.props.columns.map( (column) =>
+		    <tr key={this.props.objectType+"-"+column.name}> 
+			    <td className="formLabel"> <label>{column.label}</label>  </td>  
+				<td> <input name={column.name} type="text"/>  </td>
+			</tr>			 
+		   );
+		   				
 		return (
-		 <div>
-		 <label>Add new department:</label>
+		 <div className="addObject">
+		 <h3>Create new:</h3>
 		 <form onSubmit={this.handleSubmit}>
-		  <table>
-           <tbody> 
-		    <tr> 
-			    <td> <label>Department ID:</label>  </td>  
-				<td> <input name="id" type="text"/>  </td>
-			</tr>
-		    
-		    <tr>
-		      <td><label>Department Name: </label> </td>
-              <td> <input name="name" type="text"/> </td>
-			</tr>  
-
-			<tr>
-			 <td>Press to create user</td>
-		     <td> <input type="submit" values="Create"/> </td>  
-			</tr>			
+		   <table className="addObjectTable">
+           <tbody> 		   		  
+		       {tableRows}  
+			   <tr>
+			       <td className="formLabel">Press the button:</td>
+		           <td> <input type="submit" values="Submit"/> </td>  
+			   </tr>			
 		   </tbody> 
 		   </table>
 		 </form>  
@@ -53,137 +53,61 @@ class DepartmentAdd extends Component {
 	}	
 }
 
-class Departments extends Component {
-	
+function TableRow(props) {
+    let rowContent = props.columns.map( (column) =>
+	        <td key={column.name+"-"+props.data.id}>{props.data[column.name]}</td>
+	);	
+	return (
+		   <tr>
+		      {rowContent}
+		   </tr>				
+	)		
+}
+
+class ObjectList extends Component {
 	constructor(props) {
 		super(props);
-		this.handleDepartmentCreation = this.handleDepartmentCreation.bind(this);
+		this.handleObjectCreation = this.handleObjectCreation.bind(this);
 	}
 	
-    handleDepartmentCreation(id, name) {
-		//console.log(id+" "+name);			
-        this.props.handleDepartmentCreation(id, name);
+    handleObjectCreation(obj) {
+        this.props.handleObjectCreation(obj);
+		
 	}
 		
-	render() {		
+	render() {
 		let tableContent = null;
-		if (this.props.depList.length>0) {
-			let tableRows = this.props.depList.map( (element) => 		
-		       <tr key={element.id}> <td>{element.id}</td> <td>{element.name}</td> </tr>	
+		if (this.props.objectList.length>0) {			
+			let tableRows = this.props.objectList.map( (element) =>
+			  <TableRow key={element.id} data={element} columns={this.props.columns} />
 		    );
+		   let tableHeader = this.props.columns.map( (column) =>
+		      <th key={column.name}>{column.label}</th>
+			);			
+			
 			tableContent = 
-
-			<table>
-			  <th>ID</th> <th>Name</th>
+			<div>
+			<h3>List of existing:</h3>
+			<table className="objectListTable">			
 			   <tbody>
+			      <tr>{tableHeader}</tr>
 			      {tableRows}
 			   </tbody>
 			</table>
+			</div>
 		}
 				
 		return (
-		    <div className="depList">
-			   <DepartmentAdd onDepartmentCreate={this.handleDepartmentCreation}/>
+		    <div className="objectList">
+			   <h2>{this.props.title}</h2>
+			   <AddObjectForm onSubmit={this.handleObjectCreation} columns={this.props.columns} objectType={this.props.objectType}/>
 			   <br/>
 			   {tableContent}
 			</div>
 		)
 		
-	}
-}
-
-class UserAdd extends Component {
-	constructor(props) {
-		super(props);
-		this.handleSubmit = this.handleSubmit.bind(this);
-	}
+	}	  
 	
-	handleSubmit(event) {
-		event.preventDefault();
-		var form = event.target;
-		this.props.onUserCreate({id: getFormValue(form, "id"), name: getFormValue(form, "name"), email:getFormValue(form, "email"), department:getFormValue(form, "department") });
-	}
-	
-	render() {
-		return (
-		 <div>
-		 <label>Add new user:</label>
-		 <form onSubmit={this.handleSubmit}>
-		  <table>
-            <tbody>
-		    <tr> 
-			    <td> <label>User ID:</label>  </td>  
-				<td> <input name="id" type="text"/>  </td>
-			</tr>
-		    
-		    <tr>
-		      <td><label>User Name: </label> </td>
-              <td> <input name="name" type="text"/> </td>
-			</tr>  
-			
-		    <tr>
-		      <td><label>Email: </label> </td>
-              <td> <input name="email" type="text"/> </td>
-			</tr>
-			
-		    <tr>
-		      <td><label>Department: </label> </td>
-              <td> <input name="department" type="text"/> </td>
-			</tr>			
-
-			<tr>
-			 <td>Press to create user</td>
-		     <td> <input type="submit" values="Create"/> </td>  
-			</tr>			
-		   </tbody>
-		   </table>
-		 </form>  
-		 </div> 
-      )		 
-	}
-	
-}
-
-class Users extends Component {
-	constructor(props) {
-		super(props);
-		this.handleUserCreation = this.handleUserCreation.bind(this);
-	}
-	
-    handleUserCreation(user) {
-        this.props.handleUserCreation(user);
-	}	
-	
-	render() {
-		
-		let tableContent = null;
-		if (this.props.userList.length>0) {
-			let tableRows = this.props.userList.map( (element) => 		
-		       <tr key={element.id}> 
-			      <td>{element.id}</td> 
-				  <td>{element.name}</td>
-				  <td>{element.email}</td>
-				  <td>{element.department}</td>
-			   </tr>
-		    );
-			tableContent = 
-
-			<table>
-			  <th>ID</th> <th>Name</th> <th>Email</th> <th>Department</th>
-			    <tbody>
-			      {tableRows}
-			    </tbody>
-			</table>
-		}		
-		
-		return(
-		 <div className="userList">
-		    <UserAdd onUserCreate={this.handleUserCreation}/>
-			<br/>
-			{tableContent}
-		 </div>		   		  
-		) 
-	}
 }
 
 class Body extends Component {
@@ -195,12 +119,11 @@ class Body extends Component {
 		this.state={depList:[], userList:[]};
 	}	
 	
-    handleDepartmentCreation(id, name) {
-		console.log(id+" "+name);				
+    handleDepartmentCreation(department) {
 		this.setState(
 		   prevState=>{
 			   var list = prevState.depList;
-			   list.push({id:id, name:name});
+			   list.push(department);
 			   this.setState({depList:list})
 		   }
 		);		
@@ -217,10 +140,12 @@ class Body extends Component {
 	}	
 	
 	render() {
+		var depColumns = [{name:"id", label:"Id"}, {name:"name", label:"Name"}];
+		var userColumns = [{name:"id", label:"Id"}, {name:"name", label:"Name"}, {name:"emal", label:"Email"}, {name:"department", label:"Department"}];
 		return (
 		  <div>
-	         <Departments depList={this.state.depList} handleDepartmentCreation={this.handleDepartmentCreation} />
-		     <Users userList={this.state.userList} handleUserCreation={this.handleUserCreation} />
+	         <ObjectList objectList={this.state.depList} handleObjectCreation={this.handleDepartmentCreation} columns={depColumns} objectType="departments" title="Departments" />
+			 <ObjectList objectList={this.state.userList} handleObjectCreation={this.handleUserCreation} columns={userColumns} objectType="users" title="Users" />
 		  </div> 
 		);
 	}

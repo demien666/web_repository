@@ -40,9 +40,7 @@ const renderAddColumnsList = (objectType, columns, selectors) => {
     let rows = columns.map((column) =>
         <div key={objectType + "-" + column.name}> 
             {renderLabelForColumn(column)}
-            <br/>
             {renderEditorForColumn(column, selectors)}
-            <br/>
         </div>
     );
     return (
@@ -54,12 +52,14 @@ const renderAddColumnsList = (objectType, columns, selectors) => {
 
 const renderAddObjectForm = (objectType, columns, selectors, submitHandler) => (
             <div className="addObject">
-                <h3>Create new:</h3>
                 <form onSubmit={submitHandler}>
+                  <fieldset>
+                    <legend>Create new</legend>
                     {renderAddColumnsList(objectType, columns, selectors)}
                     <br/>
                     <label>Press the button:</label>
-                    <input type="submit" values="Submit"/>                
+                    <input type="submit" values="Submit"/>
+                  </fieldset>
                 </form>  
             </div>
             );
@@ -110,15 +110,15 @@ const renderTable = (columns, objectList) => {
         return null;
     return(
             <div>
-            <h3>List of existing:</h3>
-            <table className="objectListTable">
-                <tbody>
-                    <tr>
-                        {renderTableHeader(columns)}
-                    </tr>               
-                    {renderTableRows(columns, objectList)}
-                </tbody>        
-            </table>
+                <h3>List of existing:</h3>
+                <table className="objectListTable">
+                    <tbody>
+                        <tr>
+                            {renderTableHeader(columns)}
+                        </tr>               
+                        {renderTableRows(columns, objectList)}
+                    </tbody>        
+                </table>
             </div>
             );
 };
@@ -126,9 +126,9 @@ const renderTable = (columns, objectList) => {
 const renderObjectListForm = (objectType, title, columns, objectList, creationHadler, selectors) => (
             <div className="objectList">
                 <h2>{title}</h2>
-                <AddObjectForm onSubmit={creationHadler} columns={columns} selectors={selectors} objectType={objectType}/>
-                <br/>
-                {renderTable(columns, objectList)}
+                    <AddObjectForm onSubmit={creationHadler} columns={columns} selectors={selectors} objectType={objectType}/>
+                    <br/>
+                    {renderTable(columns, objectList)}
             </div>
             );
 
@@ -149,39 +149,39 @@ class ObjectList extends Component {
 
 }
 
+function departmentCreation(department) {
+    this.setState(
+            prevState => {
+                var list = prevState.depList;
+                var depSelectors = prevState.selectors;
+                var selector = depSelectors.department ? depSelectors.department : [];
+                list.push(department);
+                selector.push(department.name);
+                depSelectors.department = selector;
+                this.setState({depList: list});
+                this.setState({selectors: depSelectors});
+
+            }
+    );
+}
+
+function userCreation(user) {
+    this.setState(
+            prevState => {
+                var list = prevState.userList;
+                list.push(user);
+                this.setState({userList: list});
+            }
+    );
+}
+
 class Body extends Component {
 
     constructor(props) {
         super(props);
-        this.handleDepartmentCreation = this.handleDepartmentCreation.bind(this);
-        this.handleUserCreation = this.handleUserCreation.bind(this);
+        this.handleDepartmentCreation = departmentCreation.bind(this);
+        this.handleUserCreation = userCreation.bind(this);
         this.state = {depList: [], userList: [], selectors: {}};
-    }
-
-    handleDepartmentCreation(department) {
-        this.setState(
-                prevState => {
-                    var list = prevState.depList;
-                    var depSelectors = prevState.selectors;
-                    var selector = depSelectors.department ? depSelectors.department : [];
-                    list.push(department);
-                    selector.push(department.name);
-                    depSelectors.department = selector;
-                    this.setState({depList: list});
-                    this.setState({selectors: depSelectors});
-
-                }
-        );
-    }
-
-    handleUserCreation(user) {
-        this.setState(
-                prevState => {
-                    var list = prevState.userList;
-                    list.push(user);
-                    this.setState({userList: list})
-                }
-        );
     }
 
     render() {
@@ -209,7 +209,6 @@ class App extends Component {
                     </p>
                     <Body/>
                 </div>
-
                 );
     }
 }

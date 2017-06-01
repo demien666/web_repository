@@ -36,7 +36,7 @@ const renderEditorForColumn = (column, selectors) => {
     }
 };
 
-const renderAddColumns = (objectType, columns, selectors) => {
+const renderAddColumnsList = (objectType, columns, selectors) => {
     let rows = columns.map((column) =>
         <div key={objectType + "-" + column.name}> 
             {renderLabelForColumn(column)}
@@ -51,6 +51,18 @@ const renderAddColumns = (objectType, columns, selectors) => {
             </div>
             );
 };
+
+const renderAddObjectForm = (objectType, columns, selectors, submitHandler) => (
+            <div className="addObject">
+                <h3>Create new:</h3>
+                <form onSubmit={submitHandler}>
+                    {renderAddColumnsList(objectType, columns, selectors)}
+                    <br/>
+                    <label>Press the button:</label>
+                    <input type="submit" values="Submit"/>                
+                </form>  
+            </div>
+            );
 
 class AddObjectForm extends Component {
 
@@ -68,17 +80,7 @@ class AddObjectForm extends Component {
     }
 
     render() {
-        return (
-                <div className="addObject">
-                    <h3>Create new:</h3>
-                    <form onSubmit={this.handleSubmit}>
-                        {renderAddColumns(this.props.objectType, this.props.columns, this.props.selectors)}
-                        <br/>
-                        <label>Press the button:</label>
-                        <input type="submit" values="Submit"/>                
-                    </form>  
-                </div>
-                );
+        return renderAddObjectForm(this.props.objectType, this.props.columns, this.props.selectors, this.handleSubmit);
     }
 }
 

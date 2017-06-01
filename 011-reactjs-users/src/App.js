@@ -25,7 +25,7 @@ const renderEditorForColumn = (column, selectors) => {
             </option>
         );
         return (
-                <select>
+                <select name={column.name}>
                     {options}
                 </select>
                 );
@@ -84,16 +84,53 @@ class AddObjectForm extends Component {
     }
 }
 
-function TableRow(props) {
-    let rowContent = props.columns.map((column) =>
-        <td key={column.name + "-" + props.data.id}>{props.data[column.name]}</td>
+const renderTableRow = (columns, data) => {
+    let rowContent = columns.map((column) =>
+        <td key={column.name + "-" + data.id}>{data[column.name]}</td>
     );
     return (
-            <tr>
+            <tr key={data.id}>
                 {rowContent}
             </tr>
             );
-}
+};
+
+const renderTableHeader = (columns) => (
+            columns.map((column) =>
+                <th key={column.name}>{column.label}</th>
+            )
+            );
+
+const renderTableRows = (columns, objectList) => (
+            objectList.map((data) => renderTableRow(columns, data))
+            );
+
+const renderTable = (columns, objectList) => {
+    if (!objectList || objectList.length === 0)
+        return null;
+    return(
+            <div>
+            <h3>List of existing:</h3>
+            <table className="objectListTable">
+                <tbody>
+                    <tr>
+                        {renderTableHeader(columns)}
+                    </tr>               
+                    {renderTableRows(columns, objectList)}
+                </tbody>        
+            </table>
+            </div>
+            );
+};
+
+const renderObjectListForm = (objectType, title, columns, objectList, creationHadler, selectors) => (
+            <div className="objectList">
+                <h2>{title}</h2>
+                <AddObjectForm onSubmit={creationHadler} columns={columns} selectors={selectors} objectType={objectType}/>
+                <br/>
+                {renderTable(columns, objectList)}
+            </div>
+            );
 
 class ObjectList extends Component {
     constructor(props) {
@@ -107,36 +144,7 @@ class ObjectList extends Component {
     }
 
     render() {
-        let tableContent = null;
-        if (this.props.objectList.length > 0) {
-            let tableRows = this.props.objectList.map((element) =>
-                <TableRow key={element.id} data={element} columns={this.props.columns} />
-            );
-            let tableHeader = this.props.columns.map((column) =>
-                <th key={column.name}>{column.label}</th>
-            );
-
-            tableContent =
-                    <div>
-                        <h3>List of existing:</h3>
-                        <table className="objectListTable">			
-                            <tbody>
-                                <tr>{tableHeader}</tr>
-                                {tableRows}
-                            </tbody>
-                        </table>
-                    </div>
-        }
-
-        return (
-                <div className="objectList">
-                    <h2>{this.props.title}</h2>
-                    <AddObjectForm onSubmit={this.handleObjectCreation} columns={this.props.columns} selectors={this.props.selectors} objectType={this.props.objectType}/>
-                    <br/>
-                    {tableContent}
-                </div>
-                );
-
+        return renderObjectListForm(this.props.objectType, this.props.title, this.props.columns, this.props.objectList, this.handleObjectCreation, this.props.selectors);
     }
 
 }

@@ -12,6 +12,46 @@ function getFormValue(form, valueName) {
     return result;
 }
 
+const renderLabelForColumn = column => (
+            <label className="formLabel">{column.label}:</label>
+            );
+
+const renderEditorForColumn = (column, selectors) => {
+    if (selectors && selectors[column.name]) {
+        var list = selectors[column.name];
+        let options = list.map((el) =>
+            <option key={el} value={el}>
+                {el}
+            </option>
+        );
+        return (
+                <select>
+                    {options}
+                </select>
+                );
+    } else {
+        return (
+                <input name={column.name} type="text"/>
+                );
+    }
+};
+
+const renderAddColumns = (objectType, columns, selectors) => {
+    let rows = columns.map((column) =>
+        <div key={objectType + "-" + column.name}> 
+            {renderLabelForColumn(column)}
+            <br/>
+            {renderEditorForColumn(column, selectors)}
+            <br/>
+        </div>
+    );
+    return (
+            <div>
+                {rows}
+            </div>
+            );
+};
+
 class AddObjectForm extends Component {
 
     constructor(props) {
@@ -27,51 +67,15 @@ class AddObjectForm extends Component {
         this.props.onSubmit(formObject);
     }
 
-    getLabelForColumn(column) {
-        return (
-                <label className="formLabel">{column.label}:</label>
-                )
-    }
-
-    getEditorForColumn(column) {
-        if (this.props.selectors && this.props.selectors[column.name]) {
-            var list = this.props.selectors[column.name];
-            let options = list.map((el) =>
-                <option key={el} value={el}>
-                    {el}
-                </option>
-            );
-            return (
-                    <select>
-                        {options}
-                    </select>
-                    )
-        } else {
-            return (
-                    <input name={column.name} type="text"/>
-                    )
-        }
-    }
-
     render() {
-        let tableRows = this.props.columns.map((column) =>
-            <div key={this.props.objectType + "-" + column.name}> 
-                {this.getLabelForColumn(column)}
-                <br/>
-                {this.getEditorForColumn(column)}
-                <br/>
-            </div>
-        );
-
         return (
                 <div className="addObject">
                     <h3>Create new:</h3>
                     <form onSubmit={this.handleSubmit}>
-                        {tableRows}     
+                        {renderAddColumns(this.props.objectType, this.props.columns, this.props.selectors)}
                         <br/>
                         <label>Press the button:</label>
-                        <input type="submit" values="Submit"/>
-                
+                        <input type="submit" values="Submit"/>                
                     </form>  
                 </div>
                 );
@@ -86,7 +90,7 @@ function TableRow(props) {
             <tr>
                 {rowContent}
             </tr>
-            )
+            );
 }
 
 class ObjectList extends Component {
@@ -129,7 +133,7 @@ class ObjectList extends Component {
                     <br/>
                     {tableContent}
                 </div>
-                )
+                );
 
     }
 

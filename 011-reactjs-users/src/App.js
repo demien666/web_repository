@@ -29,41 +29,49 @@ class AddObjectForm extends Component {
 
     getLabelForColumn(column) {
         return (
-                <td className="formLabel"> 
-                    <label>{column.label}</label>  
-                </td>
+                <label className="formLabel">{column.label}:</label>
                 )
     }
 
     getEditorForColumn(column) {
-        return (
-                <td> 
-                    <input name={column.name} type="text"/>  
-                </td>
-                )
+        if (this.props.selectors && this.props.selectors[column.name]) {
+            var list = this.props.selectors[column.name];
+            let options = list.map((el) =>
+                <option key={el} value={el}>
+                    {el}
+                </option>
+            );
+            return (
+                    <select>
+                        {options}
+                    </select>
+                    )
+        } else {
+            return (
+                    <input name={column.name} type="text"/>
+                    )
+        }
     }
 
     render() {
         let tableRows = this.props.columns.map((column) =>
-            <tr key={this.props.objectType + "-" + column.name}> 
+            <div key={this.props.objectType + "-" + column.name}> 
                 {this.getLabelForColumn(column)}
+                <br/>
                 {this.getEditorForColumn(column)}
-            </tr>
+                <br/>
+            </div>
         );
 
         return (
                 <div className="addObject">
                     <h3>Create new:</h3>
                     <form onSubmit={this.handleSubmit}>
-                        <table className="addObjectTable">
-                            <tbody> 		   		  
-                                {tableRows}  
-                                <tr>
-                                    <td className="formLabel">Press the button:</td>
-                                    <td> <input type="submit" values="Submit"/> </td>  
-                                </tr>			
-                            </tbody> 
-                        </table>
+                        {tableRows}     
+                        <br/>
+                        <label>Press the button:</label>
+                        <input type="submit" values="Submit"/>
+                
                     </form>  
                 </div>
                 );
@@ -117,13 +125,13 @@ class ObjectList extends Component {
         return (
                 <div className="objectList">
                     <h2>{this.props.title}</h2>
-                    <AddObjectForm onSubmit={this.handleObjectCreation} columns={this.props.columns} objectType={this.props.objectType}/>
+                    <AddObjectForm onSubmit={this.handleObjectCreation} columns={this.props.columns} selectors={this.props.selectors} objectType={this.props.objectType}/>
                     <br/>
                     {tableContent}
                 </div>
                 )
 
-    }	  
+    }
 
 }
 
@@ -133,15 +141,21 @@ class Body extends Component {
         super(props);
         this.handleDepartmentCreation = this.handleDepartmentCreation.bind(this);
         this.handleUserCreation = this.handleUserCreation.bind(this);
-        this.state = {depList: [], userList: []};
-    }	
+        this.state = {depList: [], userList: [], selectors: {}};
+    }
 
     handleDepartmentCreation(department) {
         this.setState(
                 prevState => {
                     var list = prevState.depList;
+                    var depSelectors = prevState.selectors;
+                    var selector = depSelectors.department ? depSelectors.department : [];
                     list.push(department);
-                    this.setState({depList: list})
+                    selector.push(department.name);
+                    depSelectors.department = selector;
+                    this.setState({depList: list});
+                    this.setState({selectors: depSelectors});
+
                 }
         );
     }
@@ -154,7 +168,7 @@ class Body extends Component {
                     this.setState({userList: list})
                 }
         );
-    }	
+    }
 
     render() {
         var depColumns = [{name: "id", label: "Id"}, {name: "name", label: "Name"}];
@@ -162,7 +176,7 @@ class Body extends Component {
         return (
                 <div>
                     <ObjectList objectList={this.state.depList} handleObjectCreation={this.handleDepartmentCreation} columns={depColumns} objectType="departments" title="Departments" />
-                    <ObjectList objectList={this.state.userList} handleObjectCreation={this.handleUserCreation} columns={userColumns} objectType="users" title="Users" />
+                    <ObjectList objectList={this.state.userList} selectors={this.state.selectors} handleObjectCreation={this.handleUserCreation} columns={userColumns} objectType="users" title="Users" />
                 </div>
                 );
     }

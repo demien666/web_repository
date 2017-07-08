@@ -41,7 +41,7 @@ class Body extends Component {
 
     render() {
         var depColumns = [{name: "id", label: "Id"}, {name: "name", label: "Name"}];
-        var userColumns = [{name: "id", label: "Id"}, {name: "name", label: "Name"}, {name: "emal", label: "Email"}, {name: "department", label: "Department"}];
+        var userColumns = [{name: "id", label: "Id"}, {name: "name", label: "Name"}, {name: "email", label: "Email"}, {name: "department", label: "Department"}];
         return (
                 <div>
                     <ObjectList objectList={this.state.depList} handleObjectCreation={this.handleDepartmentCreation} columns={depColumns} objectType="departments" title="Departments" />

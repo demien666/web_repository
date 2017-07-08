@@ -18,13 +18,13 @@ const renderTableRows = (columns, objectList) => (
     objectList.map((data) => renderTableRow(columns, data))
 );
 
-const renderTable = (columns, objectList) => {
+const renderTable = (objectType, columns, objectList) => {
     if (!objectList || objectList.length === 0)
         return null;
     return(
             <div>
                 <h3>List of existing:</h3>
-                <table className="objectListTable">
+                <table id={"table-"+objectType} className="objectListTable">
                     <tbody>
                         <tr>
                             {renderTableHeader(columns)}
@@ -41,7 +41,7 @@ const renderObjectListForm = (objectType, title, columns, objectList, creationHa
         <h2>{title}</h2>
         <AddObjectForm onSubmit={creationHadler} columns={columns} selectors={selectors} objectType={objectType}/>
         <br/>
-        {renderTable(columns, objectList)}
+        {renderTable(objectType, columns, objectList)}
     </div>
 );
 

@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "request": "launch",
+            "name": "Debug Mocha Test",
+            "type": "node",
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "stopOnEntry": true,
+            "args": [
+                "--compilers",
+                "js:babel-core/register",
+                "--recursive"
+            ],
+            "cwd": "${workspaceRoot}/.",
+            "runtimeExecutable": null,
+            "env": {}
+        }
+    ]
+}

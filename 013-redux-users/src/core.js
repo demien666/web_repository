@@ -1,5 +1,7 @@
 import {User} from './domain/User';
 
+export const INITIAL_STATE = { users: [], groups: [] };
+
 let userGenerator = 0;
 
 function generateUserId() {

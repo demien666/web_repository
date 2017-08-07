@@ -6,7 +6,6 @@ import {User} from "../src/domain/User";
 
 describe('reducer', () => {
 
-
     it('should follow workflow', () => {
         let state = reducer(INITIAL_STATE, addUserAction(new User("Joe", "joe@email.com")));
         state = reducer(state, addUserAction(new User("Huan", "huan@email.com")));

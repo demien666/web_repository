@@ -7,7 +7,9 @@ describe('store', () => {
 
     it('is a Redux store configured with the correct reducer', () => {
         const store = makeStore();
+
         store.dispatch(addUserAction(new User("Joe", "joe@email.com")));
+
         expect(store.getState().users[0].getName()).to.equal("Joe");
     });
 

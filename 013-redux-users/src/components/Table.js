@@ -8,32 +8,55 @@ const capitalizeFirstLetter = (string) => {
         <td key={column.name + "-" + data.id}>{data[column.name]}</td>
     );
     */
-const renderTableRow = (columns, data) => {
+const getProperty = (data, propertyName) => {
+    let value = data[propertyName];
+    if (value === undefined) {
+        const getMethodName = "get" + capitalizeFirstLetter(propertyName);
+        value = data[getMethodName].apply(data);
+    }
+    return value;
+}
+
+const renderTableRow = (columns, data, onUpdate, onDelete) => {
+    const id = getProperty(data, "id");
     let rowContent = [];
     columns.map((column) => {
-        let value = data[column.name];
-        if (value === undefined) {
-            const getMethodName = "get" + capitalizeFirstLetter(column.name);
-            value = data[getMethodName].apply(data);
-        }
-        rowContent.push(<td key={column.name + "-" + data.id}>{value}</td>);
+        const value = getProperty(data, column.name);
+        rowContent.push(<td key={column.name + "-" + id}>{value}</td>);
         return null;
     });
-    
+
+    rowContent.push(<td> <button onClick={e => {
+        e.preventDefault()
+        onUpdate(data)
+    }} >Update</button>  </td>);
+    rowContent.push(<td> <button>Delete</button>  </td>);
+
     return (<tr key={data.id}>{rowContent}</tr>);
 };
 
+
+const renderTableHeader = (columns) => {
+    let headerContent = [];
+    columns.map((column) =>
+        headerContent.push(<th key={column.name}>{column.label}</th>)
+    );
+    headerContent.push(<th>Update</th>);
+    headerContent.push(<th>Delete</th>);
+    return headerContent;
+}
+/*
 const renderTableHeader = (columns) => (
     columns.map((column) =>
         <th key={column.name}>{column.label}</th>
     )
 );
-
-const renderTableRows = (columns, objectList) => (
-    objectList.map((data) => renderTableRow(columns, data))
+*/
+const renderTableRows = (columns, objectList, onUpdate, onDelete) => (
+    objectList.map((data) => renderTableRow(columns, data, onUpdate, onDelete))
 );
 
-export function renderTable(objectType, columns, objectList) {
+export function renderTable(objectType, columns, objectList, onUpdate, onDelete) {
     if (!objectList || objectList.length === 0)
         return null;
     return (
@@ -44,7 +67,7 @@ export function renderTable(objectType, columns, objectList) {
                     <tr>
                         {renderTableHeader(columns)}
                     </tr>
-                    {renderTableRows(columns, objectList)}
+                    {renderTableRows(columns, objectList, onUpdate, onDelete)}
                 </tbody>
             </table>
         </div>

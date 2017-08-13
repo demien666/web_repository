@@ -4,10 +4,18 @@ import './App.css';
 import	{	connect	}	from	'react-redux'
 import {renderTable} from './components/Table'
 
+
 class App extends Component {
   render() {
     const	user	=	this.props.users[0]
     var userColumns = [{name: "id", label: "Id"}, {name: "name", label: "Name"}, {name: "email", label: "Email"}];
+   
+    const onUpdateHandler = (obj) => {
+      console.log(obj);
+    }
+
+
+
     return (
       <div className="App">
         <div className="App-header">
@@ -21,7 +29,7 @@ class App extends Component {
            UserName:{user.getName()}
         </p>
         <p>
-           {renderTable("User", userColumns, this.props.users)}
+           {renderTable("User", userColumns, this.props.users, onUpdateHandler)}
         </p>  
       </div>
     );

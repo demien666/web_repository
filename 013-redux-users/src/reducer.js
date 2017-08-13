@@ -8,7 +8,8 @@ export function reducer(state = INITIAL_STATE, action) {
   case UPDATE_USER:
     return updateUser(state, action.payload);
   case DELETE_USER:
-    return deleteUser(state, action.payload)
+    return deleteUser(state, action.payload);
+  default:
+      return state;
   }
-  return state;
 }

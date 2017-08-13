@@ -14,7 +14,6 @@ function getUserIndex(users, user) {
         let each = users[i];
         if (each.getId()===user.getId()) {
             return i;
-            break;
         }
     }
     return -1;

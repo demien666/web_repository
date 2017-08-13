@@ -22,3 +22,43 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.objectList {
+    text-align: left;
+    border-style: solid;
+    border-width: medium;	
+    padding: 10px;
+    margin: 10px;
+}
+
+.objectList h2 {
+    background-color: #222;
+    margin-top: -10px;
+    margin-left: -10px;
+    margin-right: -10px;
+    color: white;	
+    text-align: center;
+}
+
+.objectList h3 {
+    background-color: #DDD;
+    color: #000;	
+    text-align: left;
+}
+
+.objectListTable td {
+    border-collapse: collapse;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.objectListTable th {
+    background-color: #DDD;
+}
+
+
+.formLabel {
+    text-align: right;
+    float: left;
+    width: 100px;
+}
